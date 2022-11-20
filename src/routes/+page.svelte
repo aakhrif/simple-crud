@@ -1,6 +1,20 @@
 <script lang="ts">
 	import DataTable, { Head, Body, Row, Cell } from '@smui/data-table';
 	import Checkbox from '@smui/checkbox';
+	import Uploader from '../components/uploader.svelte';
+	import Button, { Label } from '@smui/button';
+
+	function handleMultipleUpload(event: { detail: any }) {
+		console.log('handleMultipleUpload returned urls ==> ', event.detail);
+	}
+
+	const createRecord = () => {
+		console.log('create')
+	}
+
+	const deleteAttachment = () => {
+		console.log('delete')
+	}
 
 	$: selectedPrice = selected.reduce((total, option) => option.price + total, 0);
 
@@ -43,6 +57,7 @@
 			<Cell>Name</Cell>
 			<Cell>Description</Cell>
 			<Cell numeric>Price</Cell>
+			<Cell>Actions</Cell>
 		</Row>
 	</Head>
 	<Body>
@@ -54,6 +69,15 @@
 				<Cell>{option.name}</Cell>
 				<Cell>{option.description}</Cell>
 				<Cell numeric>{option.price}</Cell>
+				<Cell>
+					<Uploader multiple={true} on:upload={handleMultipleUpload} />
+					<Button on:click={createRecord} variant="raised">
+						<Label>Create</Label>
+					</Button>
+					<Button on:click={deleteAttachment} variant="raised">
+						<Label>Delete</Label>
+					</Button>
+				</Cell>
 			</Row>
 		{/each}
 	</Body>
