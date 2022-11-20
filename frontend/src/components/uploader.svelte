@@ -7,7 +7,7 @@
     let uploadedFiles: any[] = []
     function handleUpload(event: any) {
         if(multiple ){
-            for(let file = 0; file < event.target.files.length; file++){
+            for(let file = 0; file < event.target.files.length; file++) {
                 uploadFile(event.target.files[file] , event.target.files.length)
             }
         }else{
@@ -16,12 +16,14 @@
     }
 
     async function uploadFile(file: any ,  length: number) {
+        console.log('uploadFile... ')
         var formdata = new FormData();
         formdata.append("file", file , file.name)
         formdata.append('upload_preset', unsignedUploadPreset);
         formdata.append('tags', 'browser_upload'); // Optional - add tag for image admin in Cloudinary
 
-        var url = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+        // TO DO
+        var url = ''; //`https://api.cloudinary.com/v1_1/${cloudName}/upload`;
         var response = await fetch(url, {
             method: 'POST', 
             body: formdata
