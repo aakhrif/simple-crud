@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './user/users.module';
 import * as dotenv from 'dotenv';
-// import { LoggerModule } from './logger/logger.module';
-import { UserHttpModule } from './user/user-http.module';
+import { DataSource } from 'typeorm';
 
 dotenv.config();
 
@@ -20,14 +18,14 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       entities: [],
       synchronize: true,
+      autoLoadEntities: true,
     }),
     // LoggerModule,
-    UserModule,
-    UserHttpModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [AppService],
 })
 export class AppModule {
-  constructor() {}
+  constructor(private dataSource: DataSource) {}
 }

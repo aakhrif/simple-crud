@@ -1,28 +1,26 @@
-// import { IsBoolean, IsEmail, IsNotEmpty, Length, Validate } from 'class-validator'
-// import { PasswordConfirmValidator } from '@validators/password-confirm.validator'
-// import { UniqueEmailValidator } from '@validators/unique-email.validator'
+import { IsBoolean, IsNotEmpty } from "class-validator"
 
 export class CreateUserDto {
 //   @IsNotEmpty()
 //   @IsEmail()
 //   @Validate(UniqueEmailValidator)
-  email: string
+  // email: string
 
-//   @IsNotEmpty()
+  @IsNotEmpty()
   firstName: string
 
-//   @IsNotEmpty()
+  @IsNotEmpty()
   lastName: string
 
 //   @IsNotEmpty()
 //   @Length(8, 24)
-  password: string
+  // password: string
 
 //   @IsNotEmpty()
 //   @Validate(PasswordConfirmValidator, ['password'])
-  password_confirmation: string
+  // password_confirmation: string
 
-//   @IsNotEmpty()
-//   @IsBoolean()
+  @IsNotEmpty()
+  @IsBoolean()
   isActive: boolean
 }

@@ -1,47 +1,20 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, Unique, UpdateDateColumn } from 'typeorm'
-import { Exclude, Expose } from 'class-transformer'
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+// import { Photo } from '../photos/photo.entity';
 
-@Entity({ name: 'users' })
-export class User extends BaseEntity {
+@Entity()
+export class User {
   @PrimaryGeneratedColumn()
-  id: number
-
-  @Unique(['email'])
-  @Column()
-  email: string
+  id: number;
 
   @Column()
-  firstName: string
+  firstName: string;
 
   @Column()
-  lastName: string
-
-  @Exclude()
-  @Column()
-  password: string
+  lastName: string;
 
   @Column({ default: true })
-  isActive: boolean
+  isActive: boolean;
 
-  @CreateDateColumn({
-    default: `now()`,
-    nullable: true,
-  })
-  createdAt: string
-
-  @UpdateDateColumn({
-    default: `now()`,
-    nullable: true,
-  })
-  updatedAt: string
-
-  constructor(partial: Partial<User>) {
-    super()
-    Object.assign(this, partial)
-  }
-
-  @Expose()
-  get fullName(): string {
-    return `${this.firstName} ${this.lastName}`
-  }
+  // @OneToMany(type => Photo, photo => photo.user)
+  // photos: Photo[];
 }
