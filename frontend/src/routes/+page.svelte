@@ -4,12 +4,28 @@
 	import Uploader from '../components/uploader.svelte';
 	import Button, { Label } from '@smui/button';
 
+	// export const prerender = true;
+
 	function handleMultipleUpload(event: { detail: any }) {
 		console.log('handleMultipleUpload returned urls ==> ', event.detail);
 	}
 
-	const createRecord = () => {
-		console.log('create')
+	const getUsers = async () => {
+		const res = await fetch('api/users');
+	}
+
+	const createRecord = async () => {
+		const res = await fetch('http://localhost:5173/api/users', {
+			method: 'POST',
+			body: JSON.stringify({
+				firstName: "foo",
+				lastName: "bar",
+				isActive: true
+			})
+		})
+		
+		const json = await res.json()
+		return JSON.stringify(json)
 	}
 
 	const deleteAttachment = () => {
@@ -76,6 +92,9 @@
 					</Button>
 					<Button on:click={deleteAttachment} variant="raised">
 						<Label>Delete</Label>
+					</Button>
+					<Button on:click={getUsers} variant="raised">
+						<Label>Show users</Label>
 					</Button>
 				</Cell>
 			</Row>

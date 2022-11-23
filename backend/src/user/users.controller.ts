@@ -6,6 +6,7 @@ import {
   HttpStatus,
   Post,
   Res,
+  SetMetadata,
   UseInterceptors,
 } from '@nestjs/common';
 import { User } from './user.entity';
@@ -23,20 +24,17 @@ export class UsersController {
     return this.userService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('/create')
   async create(@Res() res, @Body() user: CreateUserDto) {
     console.log('create user endpoint ', user);
     try {
       await this.userService.create(user);
-      return res.status(HttpStatus.OK).json({
-        message: 'User Inserted successfully!',
-        status: 200,
-      });
+      if (res.status(HttpStatus.OK))
+        return { message: 'User Inserted successfully!', status: 200 }
     } catch (err) {
-      return res.status(HttpStatus.BAD_REQUEST).json({
-        message: 'Error: User not updated!',
-        status: 400,
-      });
+      if (res.status(HttpStatus.BAD_REQUEST))
+        return { message: 'Error: User not updated!', status: 400 };
     }
   }
 }
