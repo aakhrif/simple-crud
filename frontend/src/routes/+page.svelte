@@ -3,17 +3,24 @@
 	import Checkbox from '@smui/checkbox';
 	import Uploader from '../components/uploader.svelte';
 	import Button, { Label } from '@smui/button';
+	import { onMount } from 'svelte';
 
-	// export const prerender = true;
+	type User = {
+		id: number,
+		firstName: string,
+		lastName: string,
+		isActive: boolean
+	}
+
+	export let users: Array<User> = [];
+	onMount( async () => {
+		users = await (await fetch('http://localhost:5173/api/users')).json();
+	});
 
 	function handleMultipleUpload(event: { detail: any }) {
 		console.log('handleMultipleUpload returned urls ==> ', event.detail);
 	}
-
-	const getUsers = async () => {
-		const res = await fetch('api/users');
-	}
-
+	
 	const createRecord = async () => {
 		const res = await fetch('http://localhost:5173/api/users', {
 			method: 'POST',
@@ -32,36 +39,7 @@
 		console.log('delete')
 	}
 
-	$: selectedPrice = selected.reduce((total, option) => option.price + total, 0);
-
-	let options = [
-		{
-			name: 'Broom',
-			description: 'A wooden handled broom.',
-			price: 15
-		},
-		{
-			name: 'Dust Pan',
-			description: 'A plastic dust pan.',
-			price: 8
-		},
-		{
-			name: 'Mop',
-			description: 'A strong, durable mop.',
-			price: 18
-		},
-		{
-			name: 'Horse',
-			description: "She's got some miles on her.",
-			price: 83
-		},
-		{
-			name: 'Bucket',
-			description: 'A metal bucket.',
-			price: 13
-		}
-	];
-	let selected = [options[2]];
+	let selected = ''//users[0];
 </script>
 
 <DataTable style="width: 100%;">
@@ -70,21 +48,21 @@
 			<Cell checkbox>
 				<Checkbox />
 			</Cell>
-			<Cell>Name</Cell>
-			<Cell>Description</Cell>
-			<Cell numeric>Price</Cell>
+			<Cell>Firstname</Cell>
+			<Cell>Lastname</Cell>
+			<Cell>isActive</Cell>
 			<Cell>Actions</Cell>
 		</Row>
 	</Head>
 	<Body>
-		{#each options as option (option.name)}
+		{#each users as user (user.id)}
 			<Row>
 				<Cell checkbox>
-					<Checkbox bind:group={selected} value={option} valueKey={option.name} />
+					<Checkbox bind:group={selected} value={user} valueKey={user.firstName} />
 				</Cell>
-				<Cell>{option.name}</Cell>
-				<Cell>{option.description}</Cell>
-				<Cell numeric>{option.price}</Cell>
+				<Cell>{user.firstName}</Cell>
+				<Cell>{user.lastName}</Cell>
+				<Cell >{user.isActive}</Cell>
 				<Cell>
 					<Uploader multiple={true} on:upload={handleMultipleUpload} />
 					<Button on:click={createRecord} variant="raised">
@@ -93,7 +71,7 @@
 					<Button on:click={deleteAttachment} variant="raised">
 						<Label>Delete</Label>
 					</Button>
-					<Button on:click={getUsers} variant="raised">
+					<Button on:click={() => console.log("todo")} variant="raised">
 						<Label>Show users</Label>
 					</Button>
 				</Cell>
@@ -102,5 +80,5 @@
 	</Body>
 </DataTable>
 
-<pre class="status">Selected: {selected.map((option) => option.name).join(', ')}</pre>
-<pre class="status">Total: {selectedPrice}</pre>
+<!-- <pre class="status">Selected: {selected.map((option) => option.name).join(', ')}</pre>
+<pre class="status">Total: {selectedPrice}</pre> -->
