@@ -13,7 +13,9 @@
 	}
 
 	export let users: Array<User> = [];
+	$: editUser = {firstName: '', lastName: '', isActive: false};
 	onMount( async () => {
+		
 		users = await (await fetch('http://localhost:5173/api/users')).json();
 	});
 
@@ -22,12 +24,13 @@
 	}
 	
 	const createRecord = async () => {
+		console.log('editUser', editUser)
 		const res = await fetch('http://localhost:5173/api/users', {
 			method: 'POST',
 			body: JSON.stringify({
-				firstName: "foo",
-				lastName: "bar",
-				isActive: true
+				firstName: editUser.firstName,
+				lastName: editUser.lastName,
+				isActive: editUser.isActive
 			})
 		})
 		
@@ -38,6 +41,14 @@
 	const deleteAttachment = () => {
 		console.log('delete')
 	}
+
+	let showingRow = false;
+
+	const addRow = () => {
+		showingRow = true
+	}
+
+	
 
 	let selected = ''//users[0];
 </script>
@@ -55,6 +66,19 @@
 		</Row>
 	</Head>
 	<Body>
+		{#if showingRow}
+		<Row>
+			<Cell></Cell>
+			<Cell> <input bind:value={editUser.firstName}/></Cell>
+			<Cell> <input bind:value={editUser.lastName}/></Cell>
+			<Cell> <input bind:value={editUser.isActive}/></Cell>
+			<Cell>
+				<Button on:click={createRecord} variant="raised">
+					<Label>Create</Label>
+				</Button>
+			</Cell>
+		</Row> 
+		{/if}
 		{#each users as user (user.id)}
 			<Row>
 				<Cell checkbox>
@@ -65,7 +89,7 @@
 				<Cell >{user.isActive}</Cell>
 				<Cell>
 					<Uploader multiple={true} on:upload={handleMultipleUpload} />
-					<Button on:click={createRecord} variant="raised">
+					<Button on:click={() => console.log("todo")} variant="raised">
 						<Label>Create</Label>
 					</Button>
 					<Button on:click={deleteAttachment} variant="raised">
@@ -78,6 +102,9 @@
 			</Row>
 		{/each}
 	</Body>
+	<Button on:click={addRow} variant="raised">
+		<Label>Add Row</Label>
+	</Button>
 </DataTable>
 
 <!-- <pre class="status">Selected: {selected.map((option) => option.name).join(', ')}</pre>

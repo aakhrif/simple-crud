@@ -9,15 +9,10 @@ export async function GET() {
 	}
 }
 
-export async function POST() {
-	const body = {
-		firstName: 'foo',
-		lastName: 'bar',
-		isActive: false
-	};
+export async function POST({request}: {request: any}) {
 	return await fetch('http://localhost:5000/users/create', {
         method: "post",
-        body: JSON.stringify(body),
+        body: JSON.stringify(await request.json()),
         headers: { "Content-Type": "application/json" }
     })
     .then(res => res.json())
