@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './user/users.module';
 import * as dotenv from 'dotenv';
@@ -24,7 +23,7 @@ dotenv.config();
     UsersModule,
   ],
   controllers: [],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {
   constructor(private dataSource: DataSource) {}
