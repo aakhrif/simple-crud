@@ -20,12 +20,12 @@ export class UsersService {
   }
 
   async create(user: CreateUserDto): Promise<User> {
-    try {
+    // try {
       const newUser = this.usersRepository.create(user);
-      return await this.usersRepository.save(newUser);
-    } catch (err) {
-      throw new HttpException(err, HttpStatus.BAD_REQUEST);
-    }
+      return this.usersRepository.save(newUser);
+    // } catch (err) {
+    //   throw new HttpException(err, HttpStatus.BAD_REQUEST);
+    // }
   }
 
   async remove(id: string): Promise<void> {

@@ -36,8 +36,13 @@
 		return JSON.stringify(json);
 	};
 
-	const deleteRecord = () => {
-		console.log('delete');
+	const deleteRecord = async (user: User) => {
+		console.log('delete', user);
+		return await fetch(`http://localhost:5173/api/users/${user.id}`, {
+			method: 'DELETE',
+		})
+		.then((res) => res.json())
+		.catch((error) => console.log(error))
 	};
 
 	const updateRecord = () => {
@@ -88,7 +93,7 @@
 					<Button on:click={updateRecord} variant="raised">
 						<Label>Update</Label>
 					</Button>
-					<Button on:click={deleteRecord} variant="raised">
+					<Button on:click={() => deleteRecord(user)} variant="raised">
 						<Label>Delete</Label>
 					</Button>
 				</Cell>

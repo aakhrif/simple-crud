@@ -1,5 +1,3 @@
-import { json } from '@sveltejs/kit';
-
 export async function GET() {
 	try {
 		const res = await fetch('http://localhost:5000/users');

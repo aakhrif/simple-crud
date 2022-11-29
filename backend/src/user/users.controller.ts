@@ -2,8 +2,10 @@ import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
   HttpStatus,
+  Param,
   Post,
   Res,
   SetMetadata,
@@ -36,5 +38,10 @@ export class UsersController {
       if (res.status(HttpStatus.BAD_REQUEST))
         return { message: 'Error: User not updated!', status: 400 };
     }
+  }
+
+  @Delete(':id')
+  async delete(@Param() params) {
+    this.userService.remove(params.id);
   }
 }
