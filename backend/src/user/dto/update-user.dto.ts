@@ -11,12 +11,12 @@ export class UpdateUserDto {
 //   @IsOptional()
 //   @IsNotEmpty()
 //   @Length(8, 24)
-  password: string
+  // password: string
 
 //   @IsOptional()
 //   @IsNotEmpty()
 //   @Validate(PasswordConfirmValidator, ['password'])
-  password_confirmation: string
+  // password_confirmation: string
 
 //   @IsOptional()
 //   @IsBoolean()

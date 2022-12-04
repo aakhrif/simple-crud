@@ -7,9 +7,9 @@ export class BaseService<T extends BaseEntity, R extends Repository<T>> implemen
   protected readonly repository: R
   protected readonly logger: LoggerService
 
-  constructor(repository: R, logger: LoggerService) {
+  constructor(repository: R) {
     this.repository = repository
-    this.logger = logger
+    this.logger = new LoggerService();
   }
 
   index(): Promise<T[]> {

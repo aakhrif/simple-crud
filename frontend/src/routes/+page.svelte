@@ -14,11 +14,11 @@
 
 	export let users: Array<User> = [];
 	$: editUser = { firstName: '', lastName: '', isActive: false };
-	let selected = ''; //users[0];
+	let selected: any[] = [];
 	let showingRow = false;
 
 	onMount(async () => {
-		users = await (await fetch('http://localhost:5173/api/users')).json();
+		users = await (await fetch('/api/users')).json();
 	});
 
 	function handleMultipleUpload(event: { detail: any }) {
@@ -27,7 +27,7 @@
 
 	const createRecord = async () => {
 		console.log('editUser', editUser);
-		const res = await fetch('http://localhost:5173/api/users', {
+		const res = await fetch('/api/users', {
 			method: 'POST',
 			body: JSON.stringify(editUser)
 		});
@@ -38,15 +38,21 @@
 
 	const deleteRecord = async (user: User) => {
 		console.log('delete', user);
-		return await fetch(`http://localhost:5173/api/users/${user.id}`, {
+		return await fetch(`/api/users/${user.id}`, {
 			method: 'DELETE',
 		})
 		.then((res) => res.json())
 		.catch((error) => console.log(error))
 	};
 
-	const updateRecord = () => {
-		console.log('update');
+	const updateRecord = async (user: User) => {
+		console.log('update', editUser);
+		return await fetch(`/api/users/${user.id}`, {
+			method: 'PUT',
+			body: JSON.stringify(editUser)
+		})
+		.then((res) => res.json())
+		.catch((error) => console.log(error))
 	};
 
 	const addRow = () => {
@@ -85,12 +91,12 @@
 				<Cell checkbox>
 					<Checkbox bind:group={selected} value={user} valueKey={user.firstName} />
 				</Cell>
-				<Cell>{user.firstName}</Cell>
+				<Cell contenteditable="true" bind:textContent={user.firstName}>{user.firstName}</Cell>
 				<Cell>{user.lastName}</Cell>
 				<Cell>{user.isActive}</Cell>
 				<Cell>
 					<Uploader multiple={true} on:upload={handleMultipleUpload} />
-					<Button on:click={updateRecord} variant="raised">
+					<Button on:click={() => updateRecord(user)} variant="raised">
 						<Label>Update</Label>
 					</Button>
 					<Button on:click={() => deleteRecord(user)} variant="raised">
@@ -110,5 +116,4 @@
 	</Body>
 </DataTable>
 
-<!-- <pre class="status">Selected: {selected.map((option) => option.name).join(', ')}</pre>
-<pre class="status">Total: {selectedPrice}</pre> -->
+<pre class="status">Selected: {selected.map((option) => option.firstName).join(', ')}</pre>

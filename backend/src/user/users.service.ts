@@ -1,7 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { identity } from 'rxjs';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 
 @Injectable()
@@ -20,12 +22,17 @@ export class UsersService {
   }
 
   async create(user: CreateUserDto): Promise<User> {
-    // try {
-      const newUser = this.usersRepository.create(user);
-      return this.usersRepository.save(newUser);
-    // } catch (err) {
-    //   throw new HttpException(err, HttpStatus.BAD_REQUEST);
-    // }
+    const newUser = this.usersRepository.create(user);
+    return this.usersRepository.save(newUser);
+  }
+
+  async update(id: number, user: UpdateUserDto): Promise<User> {
+    return await this.usersRepository.save({
+      id: id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      isActive: user.isActive
+    });
   }
 
   async remove(id: string): Promise<void> {
